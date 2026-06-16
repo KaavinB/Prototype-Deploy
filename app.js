@@ -714,8 +714,8 @@ function viewMacro() {
         <div class="filter-group">
           <div class="fg-label">Demographics</div>
           <div class="filter-opts">
-            ${['All groups', 'First-generation', 'Underrepresented'].map((o, i) => `
-              <label class="f-check ${i === 0 ? 'on' : ''}" onclick="App.toggleCheck(this)"><span class="box">${ico('check')}</span>${o}</label>`).join('')}
+            ${['First-generation', 'Underrepresented'].map((o) => `
+              <label class="f-check" onclick="App.toggleCheck(this)"><span class="box">${ico('check')}</span>${o}</label>`).join('')}
           </div>
         </div>
         <button class="btn btn-soft btn-sm btn-block" onclick="App.toast('Filters applied (demo)','filter')">Apply filters</button>
