@@ -679,8 +679,7 @@ function viewMacro() {
   return shell(`
     ${resultsHead('macro', 'Programs: PhD Pipeline Scoping',
       'Program-level view of PhD production across relevant institutions.',
-      `<button class="btn btn-ghost btn-sm" onclick="App.toast('Refine by specialization — opening filters (demo)','filter')">${ico('filter')} Refine by specialization</button>
-       <button class="btn btn-soft btn-sm" onclick="App.go('meso')">${ico('meso')} Switch to Clusters</button>
+      `<button class="btn btn-soft btn-sm" onclick="App.go('meso')">${ico('meso')} Switch to Clusters</button>
        <button class="btn btn-primary btn-sm" onclick="App.toast('Mock report exported (demo)','download')">${ico('download')} Export mock report</button>`)}
 
     <div class="results-head" style="margin:0 0 20px"><div class="rh-left" style="margin-top:-8px"><span class="tag tag-blue">Query · "PhDs in bioengineering at AAU institutions"</span></div></div>
