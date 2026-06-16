@@ -12,7 +12,6 @@ const I = {
   meso: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="18" cy="18" r="2"/><path d="m7 7 3 3m7-1-3 2m1 4-3-2"/></svg>',
   micro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="4"/><path d="M3 21a8 8 0 0 1 13-6"/><circle cx="18" cy="17" r="3"/><path d="m22 21-1.5-1.5"/></svg>',
   jd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>',
-  roadmap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="18" r="1.5"/><path d="M4 6h4M4 18h4"/></svg>',
   arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
   arrowUR: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>',
   bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>',
@@ -64,7 +63,6 @@ const NAV = [
   { id: 'macro', label: 'Programs', icon: 'macro', group: 'Lenses' },
   { id: 'meso', label: 'Clusters', icon: 'meso', group: 'Lenses' },
   { id: 'micro', label: 'People', icon: 'micro', group: 'Lenses' },
-  { id: 'roadmap', label: 'Roadmap', icon: 'roadmap', group: 'About' },
 ];
 
 /* ---------- Tooltip definitions ---------- */
@@ -380,7 +378,6 @@ function viewLanding() {
       </div>
       <div class="landing-nav-links">
         <a onclick="App.go('lenses')">Three Lenses</a>
-        <a onclick="App.go('roadmap')">Roadmap</a>
         <a onclick="App.go('empty')">Examples</a>
         <button class="btn btn-primary btn-sm" onclick="App.startDemo()">Start Demo ${ico('arrow')}</button>
       </div>
@@ -1087,76 +1084,6 @@ function jdResultsHTML() {
 }
 
 /* ============================================================
-   SCREEN 10 — Roadmap
-   ============================================================ */
-function viewRoadmap() {
-  const cards = [
-    { ic: 'db', grad: 'linear-gradient(135deg,#1e3a8a,#3b82f6)', t: 'Data & Database', phase: 'Foundation layer',
-      items: ['Internal APIs for rankings and dissertation data', 'Object storage for raw exports and seasonal snapshots', 'Historical ProQuest backfill', 'Current job-market data tables', 'Precompute pipeline for research clusters'],
-      status: 'Production Integration Needed', sk: 'status-prod' },
-    { ic: 'cpu', grad: 'linear-gradient(135deg,#6366f1,#a855f7)', t: 'Agentic Functionality', phase: 'Intelligence layer',
-      items: ['Strong intent classifier', 'Research specialization cluster mapping', 'Evaluation harness for precompute correctness', 'Job-market candidate agent', 'Seasonal Oct–Jan verification schedule'],
-      status: 'In Development', sk: 'status-indev' },
-    { ic: 'cloud', grad: 'linear-gradient(135deg,#0891b2,#22d3ee)', t: 'Infrastructure Integration', phase: 'Deployment layer',
-      items: ['SSO access', 'Managed cloud deployment', 'Role-aware access', 'Secure institutional hosting'],
-      status: 'Future Integration', sk: 'status-future' },
-    { ic: 'wrench', grad: 'linear-gradient(135deg,#059669,#10b981)', t: 'Platform for Incremental Build-Out', phase: 'Operations layer',
-      items: ['Senior data analyst development environment', 'CI and testing', 'Schema documentation', 'Prompt and ETL runbooks', 'Solo-maintainer-friendly architecture'],
-      status: 'Engagement Scope', sk: 'status-scope' },
-  ];
-  const checkColor = (sk) => sk === 'status-prod' ? 'rose' : sk === 'status-indev' ? 'amber' : sk === 'status-future' ? 'indigo' : 'green';
-  const checkBg = { rose: 'rgba(244,63,94,0.12);color:var(--rose-600)', amber: 'rgba(245,158,11,0.14);color:var(--amber-600)', indigo: 'rgba(99,102,241,0.12);color:#6366f1', green: 'rgba(16,185,129,0.12);color:var(--green-600)' };
-  const timeline = [
-    { t: 'Prototype', s: 'Demonstrated', cls: 'done' },
-    { t: 'Data & DB', s: 'Integration needed', cls: '' },
-    { t: 'Agentic', s: 'In development', cls: '' },
-    { t: 'Infrastructure', s: 'Future', cls: 'future' },
-    { t: 'Production', s: 'Goal', cls: 'future' },
-  ];
-  return shell(`
-    <div class="page-head">
-      <div class="kicker"><span class="kdot"></span> Engagement scope</div>
-      <h1>Path to a University-Integrated Production Platform</h1>
-      <p>What the prototype demonstrates, and what production would require.</p>
-    </div>
-
-    <div class="card" style="padding:24px 28px;margin-bottom:28px">
-      <div class="timeline">
-        ${timeline.map((s, i) => `
-          <div class="tl-step">
-            <div class="tl-dot ${s.cls}"></div>
-            <h6>${s.t}</h6><span>${s.s}</span>
-          </div>
-          ${i < timeline.length - 1 ? `<div class="tl-conn ${i === 0 ? 'done' : ''}"></div>` : ''}`).join('')}
-      </div>
-    </div>
-
-    <div class="roadmap-grid">
-      ${cards.map(c => {
-        const ck = checkColor(c.sk);
-        return `
-        <div class="card hoverable roadmap-card">
-          <div class="rc-head">
-            <div class="rc-ic" style="background:${c.grad}">${ico(c.ic)}</div>
-            <div><h3>${c.t}</h3><div class="rc-phase">${c.phase}</div></div>
-          </div>
-          <div class="roadmap-items">
-            ${c.items.map(it => `<div class="roadmap-item"><span class="ri-check" style="background:${checkBg[ck]}">${ico('check')}</span>${it}</div>`).join('')}
-          </div>
-          <span class="roadmap-status ${c.sk}">${ico('bolt')} ${c.status}</span>
-        </div>`;
-      }).join('')}
-
-      <div class="card roadmap-cta">
-        <h3>The prototype proves the user journey.</h3>
-        <p>The next step is productionizing the platform inside institutional infrastructure — connecting real data sources, hardening the agentic layer, and deploying behind secure access.</p>
-        <button class="btn btn-lg" style="background:#fff;color:var(--royal-600)" onclick="App.toast('Engagement brief requested (demo)','doc')">${ico('doc')} Request engagement brief</button>
-      </div>
-    </div>
-  `, 'roadmap');
-}
-
-/* ============================================================
    SCREEN 12 — Empty state / examples
    ============================================================ */
 function viewEmpty() {
@@ -1208,7 +1135,6 @@ const App = {
       case 'meso': html = viewMeso(); break;
       case 'micro': html = viewMicro(); break;
       case 'verify': html = viewVerify(); break;
-      case 'roadmap': html = viewRoadmap(); break;
       case 'empty': html = viewEmpty(); break;
       default: html = viewSearch();
     }
