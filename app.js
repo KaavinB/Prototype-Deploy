@@ -145,6 +145,19 @@ const State = {
   authed: false,
 };
 
+/* ---------- Persist navigation across refreshes ---------- */
+const NAV_KEY = 'fscp_nav_v1';
+function persistNav() {
+  try {
+    localStorage.setItem(NAV_KEY, JSON.stringify({
+      current: State.current, authed: State.authed, searchMode: State.searchMode,
+    }));
+  } catch (e) { /* storage unavailable — ignore */ }
+}
+function restoreNav() {
+  try { return JSON.parse(localStorage.getItem(NAV_KEY)); } catch (e) { return null; }
+}
+
 /* ---------- Toast ---------- */
 function toast(msg, icon = 'checkc', variant = 'success') {
   let wrap = document.querySelector('.toast-wrap');
@@ -1138,6 +1151,7 @@ const App = {
       default: html = viewSearch();
     }
     root.innerHTML = html;
+    if (screen !== 'duo') persistNav(); // 'duo' is a transient auth animation — don't resume into it
     window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
     if (screen === 'duo') animateDuo();
     if (screen !== 'landing') this.startPlaceholderRotation();
@@ -1266,4 +1280,16 @@ function initTips() {
   window.addEventListener('scroll', hideTip, true);
 }
 
-document.addEventListener('DOMContentLoaded', () => { App.render('landing'); initTips(); });
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = restoreNav();
+  if (saved && saved.current) {
+    if (typeof saved.authed === 'boolean') State.authed = saved.authed;
+    if (saved.searchMode) State.searchMode = saved.searchMode;
+    let screen = saved.current;
+    if (screen === 'duo') screen = State.authed ? 'search' : 'sso'; // don't resume the transient auth animation
+    App.render(screen);
+  } else {
+    App.render('landing');
+  }
+  initTips();
+});
