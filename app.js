@@ -580,7 +580,7 @@ function viewLenses() {
             <div class="lm-row"><span class="lm-k">Example</span><span class="lm-v"><em>"${l.ex}"</em></span></div>
             <div class="lm-row"><span class="lm-k">Output</span><span class="lm-v">${l.out}</span></div>
           </div>
-          <button class="btn btn-soft btn-sm btn-block" style="margin-top:18px" onclick="App.go('${l.screen}')">Open ${l.t} ${ico('arrow')}</button>
+          <button class="btn btn-soft btn-sm btn-block lens-open" onclick="App.go('${l.screen}')">Open ${l.t} ${ico('arrow')}</button>
         </div>`).join('')}
     </div>
 

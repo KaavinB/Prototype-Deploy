@@ -586,7 +586,7 @@ td .inst { font-weight: 600; color: var(--navy-800); }
 .landing-foot { position: relative; z-index: 5; text-align: center; padding: 70px 24px 50px; color: var(--text-faint); font-size: 13px; }
 
 /* Lens cards (overview + landing) */
-.lens-card { padding: 26px; position: relative; overflow: hidden; }
+.lens-card { padding: 26px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 .lens-card .lens-ic {
   width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; margin-bottom: 18px;
   color: #fff; box-shadow: var(--shadow-md);
@@ -603,6 +603,8 @@ td .inst { font-weight: 600; color: var(--navy-800); }
 .lens-meta .lm-row .lm-k { color: var(--text-faint); font-weight: 600; min-width: 62px; }
 .lens-meta .lm-row .lm-v { color: var(--text-soft); }
 .lens-meta .lm-row .lm-v em { font-style: italic; color: var(--slate-600); }
+.lens-card .lens-meta { margin-bottom: 18px; }                 /* keep a gap above the pinned button */
+.lens-card .lens-open { margin-top: auto; }                    /* pin button to the card bottom so they align across cards regardless of text length */
 .lens-card .lens-arrow { position: absolute; top: 26px; right: 26px; color: var(--slate-300); transition: all 0.2s ease; }
 .lens-card.hoverable:hover .lens-arrow { color: var(--royal-500); transform: translate(3px,-3px); }
 
