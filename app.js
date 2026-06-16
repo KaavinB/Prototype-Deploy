@@ -72,7 +72,8 @@ const TIPS = {
   micro: ['People', 'Shows individual dissertation or candidate matches.'],
   cip: ['CIP', 'A classification code used to group academic programs.'],
   insttype: ['Institution Type', 'A category such as R1, AAU, public, private, or other institutional grouping.'],
-  lq: ['Location Quotient', 'A simple signal showing whether an institution produces more research on this topic than expected.'],
+  share: ['Research Share', "This institution's portion of all dissertation research on the topic — a higher percentage means it accounts for more of the total."],
+  lq: ['Location Quotient', 'How concentrated this topic is at the institution versus the national average. Above 1.0 means it specializes in this area more than a typical institution.'],
   match: ['Match Strength', 'How closely a dissertation or candidate profile matches the query.'],
   verify: ['Verification Signal', 'Evidence used to estimate whether a candidate is still available.'],
 };
@@ -870,7 +871,7 @@ function viewMeso() {
     <div class="tbl-wrap" style="margin-bottom:24px">
       <div class="section-head" style="padding:18px 18px 0"><h3>Cluster ranking</h3></div>
       <table>
-        <thead><tr><th>Institution</th><th>Field</th><th>Topic</th><th>Research Share</th><th>Location Quotient ${tip('lq')}</th><th>Cluster Strength</th></tr></thead>
+        <thead><tr><th>Institution</th><th>Field</th><th>Topic</th><th>Research Share ${tip('share')}</th><th>Location Quotient ${tip('lq')}</th><th>Cluster Strength</th></tr></thead>
         <tbody>
           ${MESO_ROWS.map(r => `
             <tr>
