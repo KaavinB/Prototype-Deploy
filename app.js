@@ -158,6 +158,23 @@ function restoreNav() {
   try { return JSON.parse(localStorage.getItem(NAV_KEY)); } catch (e) { return null; }
 }
 
+/* ---------- Saved views (let users return to a lens later) ---------- */
+const SAVED_KEY = 'fscp_saved_v1';
+const LENS_TITLES = { macro: 'Programs', meso: 'Clusters', micro: 'People' };
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || []; } catch (e) { return []; }
+}
+function setSaved(arr) {
+  try { localStorage.setItem(SAVED_KEY, JSON.stringify(arr)); } catch (e) { /* ignore */ }
+}
+function relTime(ts) {
+  const s = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (s < 60) return 'just now';
+  const m = Math.round(s / 60); if (m < 60) return m + 'm ago';
+  const h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+  return new Date(ts).toLocaleDateString();
+}
+
 /* ---------- Toast ---------- */
 function toast(msg, icon = 'checkc', variant = 'success') {
   let wrap = document.querySelector('.toast-wrap');
@@ -200,6 +217,31 @@ function animateCounters(root) {
 }
 
 /* ---------- Shell render ---------- */
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+/* Topbar "Saved views" menu — button + dropdown list of saved lens states */
+function savedMenuHTML() {
+  const saved = getSaved();
+  const items = saved.length ? saved.map(v => `
+    <div class="saved-item">
+      <button class="saved-restore" onclick="App.openSaved('${v.lens}')">
+        <span class="lens-ic ${v.lens}">${ico(lensIcon(v.lens))}</span>
+        <span class="si-txt"><strong>${esc(v.title)}</strong>${v.query ? `<span class="si-q">${esc(v.query)}</span>` : ''}<span class="si-time">${relTime(v.ts)}</span></span>
+      </button>
+      <button class="saved-del" title="Remove" aria-label="Remove saved view" onclick="App.deleteSaved('${v.id}', event)">${ico('x')}</button>
+    </div>`).join('') : `<div class="saved-empty">No saved views yet. Open a lens and choose <strong>Save view</strong> to return to it later.</div>`;
+  return `
+    <div class="saved-menu">
+      <button class="icon-btn" title="Saved views" aria-label="Saved views" onclick="App.toggleSaved(event)">
+        ${ico('save')}${saved.length ? `<span class="saved-badge">${saved.length}</span>` : ''}
+      </button>
+      <div class="saved-dropdown" id="savedDropdown">
+        <div class="saved-head">Saved views</div>
+        <div class="saved-list">${items}</div>
+      </div>
+    </div>`;
+}
+
 function shell(content, activeNav) {
   return `
   <div class="app-shell">
@@ -232,6 +274,7 @@ function shell(content, activeNav) {
         </div>`}
         <div class="topbar-spacer"></div>
         <div class="topbar-actions">
+          ${savedMenuHTML()}
           <button class="icon-btn" title="Notifications" aria-label="Notifications" onclick="App.toast('No new notifications in demo mode','bell','info')"><span class="ping"></span>${ico('bell')}</button>
           <button class="icon-btn" title="Three Lenses help" aria-label="Open Three Lenses help" onclick="App.go('lenses')">${ico('help')}</button>
           <button class="icon-btn" title="Sign out (simulated)" aria-label="Sign out" onclick="App.signOut()">${ico('logout')}</button>
@@ -694,7 +737,8 @@ function viewMacro() {
     ${resultsHead('macro', 'Programs: PhD Pipeline Scoping',
       'Program-level view of PhD production across relevant institutions.',
       `<button class="btn btn-soft btn-sm" onclick="App.go('meso')">${ico('meso')} Switch to Clusters</button>
-       <button class="btn btn-primary btn-sm" onclick="App.toast('Mock report exported (demo)','download')">${ico('download')} Export mock report</button>`)}
+       <button class="btn btn-soft btn-sm" onclick="App.toast('Mock report exported (demo)','download')">${ico('download')} Export mock report</button>
+       <button class="btn btn-primary btn-sm" onclick="App.saveView('macro')">${ico('save')} Save view</button>`)}
 
     <div class="results-head" style="margin:0 0 20px"><div class="rh-left" style="margin-top:-8px"><span class="tag tag-blue">Query · "PhDs in bioengineering at AAU institutions"</span></div></div>
 
@@ -858,7 +902,7 @@ function viewMeso() {
       'Identify institutions where dissertation research concentrates around a specific topic.',
       `<button class="btn btn-ghost btn-sm" onclick="App.go('micro')">${ico('micro')} View matching candidates</button>
        <button class="btn btn-soft btn-sm" onclick="App.go('macro')">${ico('macro')} Compare with Programs</button>
-       <button class="btn btn-primary btn-sm" onclick="App.toast('Insight saved to workspace (demo)','save')">${ico('save')} Save mock insight</button>`)}
+       <button class="btn btn-primary btn-sm" onclick="App.saveView('meso')">${ico('save')} Save view</button>`)}
 
     <div class="results-head" style="margin:0 0 20px"><div class="rh-left" style="margin-top:-8px"><span class="tag tag-cyan">Query · "Which institutions produce significant research on civil wars in political science?"</span></div></div>
 
@@ -917,7 +961,7 @@ function viewMicro() {
     ${resultsHead('micro', 'People: Specialization Matching',
       'Find individual PhDs whose dissertation topics match the search area.',
       `<button class="btn btn-soft btn-sm" onclick="App.go('verify')">${ico('shield')} Check current job market</button>
-       <button class="btn btn-primary btn-sm" onclick="App.toast('Candidate shortlist saved (demo)','save')">${ico('save')} Save shortlist</button>`)}
+       <button class="btn btn-primary btn-sm" onclick="App.saveView('micro')">${ico('save')} Save view</button>`)}
 
     <div class="results-head" style="margin:0 0 20px"><div class="rh-left" style="margin-top:-8px"><span class="tag tag-violet">Query · "PhDs focusing on international relations and civil war"</span></div></div>
 
@@ -1210,6 +1254,27 @@ const App = {
 
   toggleCheck(el) { el.classList.toggle('on'); },
 
+  /* ----- Saved views ----- */
+  saveView(lens) {
+    const arr = getSaved();
+    const query = State.lastQuery || '';
+    if (arr.some(v => v.lens === lens && v.query === query)) { this.toast('This view is already saved', 'save', 'info'); return; }
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    arr.unshift({ id, lens, title: LENS_TITLES[lens] || lens, query, ts: Date.now() });
+    setSaved(arr.slice(0, 12));
+    this.refreshSavedMenu();
+    this.toast(`${LENS_TITLES[lens] || 'View'} saved — reopen it from Saved views`, 'save');
+  },
+  refreshSavedMenu() { const m = document.querySelector('.saved-menu'); if (m) m.outerHTML = savedMenuHTML(); },
+  toggleSaved(e) { if (e) e.stopPropagation(); const d = document.getElementById('savedDropdown'); if (d) d.classList.toggle('open'); },
+  openSaved(lens) { const d = document.getElementById('savedDropdown'); if (d) d.classList.remove('open'); this.go(lens); },
+  deleteSaved(id, e) {
+    if (e) e.stopPropagation();
+    setSaved(getSaved().filter(v => v.id !== id));
+    this.refreshSavedMenu();
+    const d = document.getElementById('savedDropdown'); if (d) d.classList.add('open'); // keep menu open after removing
+  },
+
   loadJD() {
     State.jdAnalyzed = false;
     if (State.current !== 'search' || State.searchMode !== 'jd') { State.searchMode = 'jd'; this.render('search'); }
@@ -1293,4 +1358,9 @@ document.addEventListener('DOMContentLoaded', () => {
     App.render('landing');
   }
   initTips();
+  // close the Saved-views dropdown when clicking outside it
+  document.addEventListener('click', (e) => {
+    const d = document.getElementById('savedDropdown');
+    if (d && d.classList.contains('open') && !e.target.closest('.saved-menu')) d.classList.remove('open');
+  });
 });
