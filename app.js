@@ -494,19 +494,36 @@ function viewSearch() {
       <button class="btn btn-primary bs-go" onclick="App.runQuery(document.getElementById('bigSearch').value)">Search ${ico('arrow')}</button>
     </div>
     <div class="starter-row">
-      ${starters.map(s => `<button class="starter" onclick="${s.q === '__jd__' ? "App.go('jd')" : `App.runQuery('${s.q.replace(/'/g, "\\'")}')`}">${ico(s.i)} ${s.t}</button>`).join('')}
+      ${starters.map(s => `<button class="starter" onclick="${s.q === '__jd__' ? "App.setMode('jd')" : `App.runQuery('${s.q.replace(/'/g, "\\'")}')`}">${ico(s.i)} ${s.t}</button>`).join('')}
     </div>` : `
-    <div class="big-search">
-      <textarea id="jdQuick" class="bs-input" placeholder="Paste a job description here…"></textarea>
-    </div>
-    <div class="starter-row">
-      <button class="btn btn-primary" onclick="App.go('jd')">Open JD Analysis ${ico('arrow')}</button>
-      <button class="starter" onclick="App.go('jd')">${ico('doc')} Load example JD</button>
+    <div class="grid grid-2" style="gap:24px;align-items:start">
+      <div>
+        <div class="jd-example" onclick="App.loadJD()">
+          <div class="jde-ic">${ico('doc')}</div>
+          <div><h5>2024 Assistant Professor: Energy &amp; Sustainability</h5><p>Example faculty posting · click to load</p></div>
+          <span class="jde-load">Load example ${ico('arrow')}</span>
+        </div>
+        <div class="big-search" style="max-width:none">
+          <textarea id="jdBox" class="bs-input" placeholder="Paste a job description here…">${State.jdAnalyzed ? JD_TEXT : ''}</textarea>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px">
+          <button class="btn btn-primary" onclick="App.analyzeJD()">${ico('spark')} Analyze JD</button>
+          <button class="btn btn-ghost" onclick="App.loadJD()">${ico('doc')} Load example</button>
+        </div>
+      </div>
+      <div id="jdResults">
+        ${State.jdAnalyzed ? jdResultsHTML() : `
+        <div class="card" style="padding:40px;text-align:center">
+          <div class="empty-ic" style="margin-bottom:16px">${ico('spark')}</div>
+          <h3 style="font-size:18px;color:var(--navy-800);font-weight:700">Extraction appears here</h3>
+          <p style="color:var(--text-soft);margin-top:8px;font-size:14px">Load the example or paste a description, then click <strong>Analyze JD</strong> to see simulated area extraction and recommended routes.</p>
+        </div>`}
+      </div>
     </div>`}
 
     <div class="guidance">
       ${ico('compass')}
-      <p><strong>Tip.</strong> Faculty Search CoPilot works best when you ask a concrete question about a field, topic, institution type, or candidate profile.</p>
+      <p><strong>Tip.</strong> ${askMode ? 'Faculty Search CoPilot works best when you ask a concrete question about a field, topic, institution type, or candidate profile.' : 'Paste a full job posting and click Analyze JD to extract the core research areas, then jump into the recommended lenses.'}</p>
     </div>
 
     <div class="status-grid">
@@ -1032,7 +1049,7 @@ function viewVerify() {
 }
 
 /* ============================================================
-   SCREEN 9 — JD Analysis
+   JD Analysis — data + results markup (rendered inline in Search's JD mode)
    ============================================================ */
 const JD_TEXT = `Assistant Professor — Energy & Sustainability (Tenure-Track, 2024)
 
@@ -1045,42 +1062,6 @@ Required: PhD in Engineering, Environmental Science, or a related field by the a
 const JD_AREAS = [
   ['Energy systems', 96], ['Sustainability', 93], ['Infrastructure resilience', 88], ['Environmental modeling', 84], ['Climate adaptation', 81],
 ];
-
-function viewJD() {
-  return shell(`
-    <div class="page-head">
-      <div class="kicker"><span class="kdot"></span> JD Analysis</div>
-      <h1>Analyze a Faculty Job Description</h1>
-      <p>Paste a job description and CoPilot will extract the core research areas, then recommend which lenses to run.</p>
-    </div>
-
-    <div class="grid grid-2" style="gap:24px;align-items:start">
-      <div>
-        <div class="jd-example" onclick="App.loadJD()">
-          <div class="jde-ic">${ico('doc')}</div>
-          <div><h5>2024 Assistant Professor: Energy &amp; Sustainability</h5><p>Example faculty posting · click to load</p></div>
-          <span class="jde-load">Load example ${ico('arrow')}</span>
-        </div>
-        <div class="big-search" style="max-width:none">
-          <textarea id="jdBox" class="bs-input" placeholder="Paste a job description here…">${State.jdAnalyzed ? JD_TEXT : ''}</textarea>
-        </div>
-        <div style="margin-top:16px;display:flex;gap:10px">
-          <button class="btn btn-primary" onclick="App.analyzeJD()">${ico('spark')} Analyze JD</button>
-          <button class="btn btn-ghost" onclick="App.loadJD()">${ico('doc')} Load example</button>
-        </div>
-      </div>
-
-      <div id="jdResults">
-        ${State.jdAnalyzed ? jdResultsHTML() : `
-        <div class="card" style="padding:40px;text-align:center">
-          <div class="empty-ic" style="margin-bottom:16px">${ico('spark')}</div>
-          <h3 style="font-size:18px;color:var(--navy-800);font-weight:700">Extraction appears here</h3>
-          <p style="color:var(--text-soft);margin-top:8px;font-size:14px">Load the example or paste a description, then click <strong>Analyze JD</strong> to see simulated area extraction and recommended routes.</p>
-        </div>`}
-      </div>
-    </div>
-  `, 'jd');
-}
 
 function jdResultsHTML() {
   const routes = [
@@ -1241,7 +1222,6 @@ const App = {
       case 'meso': html = viewMeso(); break;
       case 'micro': html = viewMicro(); break;
       case 'verify': html = viewVerify(); break;
-      case 'jd': html = viewJD(); break;
       case 'roadmap': html = viewRoadmap(); break;
       case 'empty': html = viewEmpty(); break;
       default: html = viewSearch();
@@ -1287,7 +1267,7 @@ const App = {
     if (!q) { this.toast('Type a question to search', 'alert'); return; }
     State.lastQuery = q;
     const target = detectLens(q);
-    if (target.lens === 'jd') { this.go('jd'); return; }
+    if (target.lens === 'jd') { this.setMode('jd'); return; }
     // show routing screen, then animate to results
     const root = document.getElementById('app');
     root.innerHTML = viewRouting(q, target);
@@ -1304,7 +1284,12 @@ const App = {
 
   toggleCheck(el) { el.classList.toggle('on'); },
 
-  loadJD() { State.jdAnalyzed = false; this.render('jd'); const box = document.getElementById('jdBox'); if (box) { box.value = JD_TEXT; box.focus(); } this.toast('Example job description loaded', 'doc'); },
+  loadJD() {
+    State.jdAnalyzed = false;
+    if (State.current !== 'search' || State.searchMode !== 'jd') { State.searchMode = 'jd'; this.render('search'); }
+    const box = document.getElementById('jdBox'); if (box) { box.value = JD_TEXT; box.focus(); }
+    this.toast('Example job description loaded', 'doc');
+  },
 
   analyzeJD() {
     const box = document.getElementById('jdBox');
