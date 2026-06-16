@@ -58,7 +58,6 @@ const ico = (n) => I[n] || '';
 /* ---------- Navigation model ---------- */
 const NAV = [
   { id: 'search', label: 'Home', icon: 'home', group: 'Workspace' },
-  { id: 'lenses', label: 'Three Lenses', icon: 'layers', group: 'Workspace' },
   { id: 'macro', label: 'Programs', icon: 'macro', group: 'Lenses' },
   { id: 'meso', label: 'Clusters', icon: 'meso', group: 'Lenses' },
   { id: 'micro', label: 'People', icon: 'micro', group: 'Lenses' },
