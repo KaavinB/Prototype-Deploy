@@ -57,7 +57,6 @@ const ico = (n) => I[n] || '';
 
 /* ---------- Navigation model ---------- */
 const NAV = [
-  { id: 'home', label: 'Home', icon: 'home', group: 'Workspace' },
   { id: 'search', label: 'Search', icon: 'search', group: 'Workspace' },
   { id: 'lenses', label: 'Three Lenses', icon: 'layers', group: 'Workspace' },
   { id: 'macro', label: 'Programs', icon: 'macro', group: 'Lenses' },
@@ -205,7 +204,8 @@ function shell(content, activeNav) {
   return `
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand">
+      <div class="brand brand-link" role="button" tabindex="0" title="Home" aria-label="Home"
+           onclick="App.go('home')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.go('home')}">
         <div class="brand-mark"><img src="rice-owl.jpg" class="brand-owl" alt="Rice owl" /></div>
         <div class="brand-text"><strong>Faculty Search</strong><span>CoPilot &nbsp;·&nbsp; Prototype</span></div>
       </div>
