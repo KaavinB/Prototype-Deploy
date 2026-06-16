@@ -463,12 +463,6 @@ const PLACEHOLDERS = [
 let phIdx = 0, phTimer = null;
 
 function viewSearch() {
-  const starters = [
-    { t: 'Scope a pipeline', i: 'macro', q: 'PhDs in bioengineering at AAU institutions' },
-    { t: 'Find research clusters', i: 'meso', q: 'Which institutions produce significant research on civil wars?' },
-    { t: 'Find candidates', i: 'micro', q: 'PhDs focusing on international relations and civil war' },
-    { t: 'Analyze JD', i: 'jd', q: '__jd__' },
-  ];
   const status = [
     { t: 'Programs', d: 'Program-level PhD pipelines', ic: 'macro', grad: 'linear-gradient(135deg,#1e3a8a,#3b82f6)' },
     { t: 'Clusters', d: 'Research-activity clusters', ic: 'meso', grad: 'linear-gradient(135deg,#0891b2,#22d3ee)' },
@@ -492,9 +486,6 @@ function viewSearch() {
       <input id="bigSearch" class="bs-input" placeholder="${PLACEHOLDERS[0]}"
         onkeydown="if(event.key==='Enter'){App.runQuery(this.value)}" />
       <button class="btn btn-primary bs-go" onclick="App.runQuery(document.getElementById('bigSearch').value)">Search ${ico('arrow')}</button>
-    </div>
-    <div class="starter-row">
-      ${starters.map(s => `<button class="starter" onclick="${s.q === '__jd__' ? "App.setMode('jd')" : `App.runQuery('${s.q.replace(/'/g, "\\'")}')`}">${ico(s.i)} ${s.t}</button>`).join('')}
     </div>` : `
     <div class="grid grid-2" style="gap:24px;align-items:start">
       <div>
