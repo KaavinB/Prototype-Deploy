@@ -498,11 +498,6 @@ function viewSearch() {
     </div>` : `
     <div class="grid grid-2" style="gap:24px;align-items:start">
       <div>
-        <div class="jd-example" onclick="App.loadJD()">
-          <div class="jde-ic">${ico('doc')}</div>
-          <div><h5>2024 Assistant Professor: Energy &amp; Sustainability</h5><p>Example faculty posting · click to load</p></div>
-          <span class="jde-load">Load example ${ico('arrow')}</span>
-        </div>
         <div class="big-search" style="max-width:none">
           <textarea id="jdBox" class="bs-input" placeholder="Paste a job description here…">${State.jdAnalyzed ? JD_TEXT : ''}</textarea>
         </div>
