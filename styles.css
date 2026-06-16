@@ -1081,17 +1081,17 @@ td .inst { font-weight: 600; color: var(--navy-800); }
 .tip { position: relative; display: inline-flex; align-items: center; }
 .tip .tip-trigger { width: 15px; height: 15px; border-radius: 50%; background: var(--slate-200); color: var(--slate-500); display: grid; place-items: center; font-size: 10px; font-weight: 800; cursor: help; transition: all 0.15s; margin-left: 5px; }
 .tip:hover .tip-trigger { background: var(--royal-500); color: #fff; }
-.tip .tip-body {
+.tip-body {
   position: fixed; left: 0; top: 0; width: 220px; padding: 12px 14px; border-radius: 12px;
   background: var(--navy-900); color: #e8eefb;
   font-size: 12px; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-transform: none;
   box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transform: translateY(6px);
   transition: opacity 0.18s ease, transform 0.18s ease; z-index: 1000;
 }
-.tip .tip-body.show { opacity: 1; transform: translateY(0); }
-.tip .tip-body strong { color: #fff; display: block; margin-bottom: 4px; font-size: 12.5px; }
-.tip .tip-body::after { content: ""; position: absolute; top: 100%; left: var(--arrow-x, 50%); transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--navy-900); }
-.tip .tip-body.below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--navy-900); }
+.tip-body.show { opacity: 1; transform: translateY(0); }
+.tip-body strong { color: #fff; display: block; margin-bottom: 4px; font-size: 12.5px; }
+.tip-body::after { content: ""; position: absolute; top: 100%; left: var(--arrow-x, 50%); transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--navy-900); }
+.tip-body.below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--navy-900); }
 
 /* Toast */
 .toast-wrap { position: fixed; bottom: 28px; right: 28px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }

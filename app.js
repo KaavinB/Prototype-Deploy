@@ -12,7 +12,6 @@ const I = {
   meso: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="18" cy="18" r="2"/><path d="m7 7 3 3m7-1-3 2m1 4-3-2"/></svg>',
   micro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="4"/><path d="M3 21a8 8 0 0 1 13-6"/><circle cx="18" cy="17" r="3"/><path d="m22 21-1.5-1.5"/></svg>',
   jd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>',
-  pool: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
   roadmap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="18" r="1.5"/><path d="M4 6h4M4 18h4"/></svg>',
   arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
   arrowUR: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>',
@@ -62,19 +61,17 @@ const NAV = [
   { id: 'home', label: 'Home', icon: 'home', group: 'Workspace' },
   { id: 'search', label: 'Search', icon: 'search', group: 'Workspace' },
   { id: 'lenses', label: 'Three Lenses', icon: 'layers', group: 'Workspace' },
-  { id: 'macro', label: 'Macro Lens', icon: 'macro', badge: 'live', group: 'Lenses' },
-  { id: 'meso', label: 'Meso Lens', icon: 'meso', badge: 'dev', group: 'Lenses' },
-  { id: 'micro', label: 'Micro Lens', icon: 'micro', badge: 'live', group: 'Lenses' },
-  { id: 'jd', label: 'JD Analysis', icon: 'jd', group: 'Analysis' },
-  { id: 'pool', label: 'Pool Evaluation', icon: 'pool', group: 'Analysis' },
+  { id: 'macro', label: 'Programs', icon: 'macro', group: 'Lenses' },
+  { id: 'meso', label: 'Clusters', icon: 'meso', group: 'Lenses' },
+  { id: 'micro', label: 'People', icon: 'micro', group: 'Lenses' },
   { id: 'roadmap', label: 'Roadmap', icon: 'roadmap', group: 'About' },
 ];
 
 /* ---------- Tooltip definitions ---------- */
 const TIPS = {
-  macro: ['Macro Lens', 'Program-level pipeline view.'],
-  meso: ['Meso Lens', 'Shows where research on a topic is concentrated.'],
-  micro: ['Micro Lens', 'Shows individual dissertation or candidate matches.'],
+  macro: ['Programs', 'Program-level pipeline view.'],
+  meso: ['Clusters', 'Shows where research on a topic is concentrated.'],
+  micro: ['People', 'Shows individual dissertation or candidate matches.'],
   cip: ['CIP', 'A classification code used to group academic programs.'],
   insttype: ['Institution Type', 'A category such as R1, AAU, public, private, or other institutional grouping.'],
   lq: ['Location Quotient', 'A simple signal showing whether an institution produces more research on this topic than expected.'],
@@ -129,13 +126,6 @@ const RECENT_QUERIES = [
   { q: 'Which candidates on civil wars are on the job market now?', lens: 'micro', screen: 'verify' },
   { q: 'Top 10 ranked programs in bioengineering', lens: 'macro', screen: 'macro' },
   { q: 'Find candidates working on energy systems', lens: 'micro', screen: 'micro' },
-];
-
-const POOL_ROWS = [
-  { seg: 'AAU / R1 Institutions', pot: 612, act: 34, gap: 'Moderate Gap', gapKind: 'warn', rec: 'Increase outreach' },
-  { seg: 'Top 20 Programs', pot: 280, act: 11, gap: 'High Gap', gapKind: 'bad', rec: 'Targeted outreach needed' },
-  { seg: 'Emerging Research Clusters', pot: 190, act: 6, gap: 'High Gap', gapKind: 'bad', rec: 'Add recruitment channels' },
-  { seg: 'Regional R1 Programs', pot: 166, act: 35, gap: 'Low Gap', gapKind: 'ok', rec: 'Maintain pipeline' },
 ];
 
 /* ---------- Query routing (simulated intent detection) ---------- */
@@ -377,9 +367,9 @@ function lensIcon(lens) { return lens === 'macro' ? 'macro' : lens === 'meso' ? 
 
 function viewLanding() {
   const lensCards = [
-    { k: 'macro', t: 'Macro Lens', d: 'Scope national PhD pipelines by field, institution, ranking, and demographics.' },
-    { k: 'meso', t: 'Meso Lens', d: 'Find where research activity concentrates around specific topics.' },
-    { k: 'micro', t: 'Micro Lens', d: 'Discover candidates and dissertation matches with relevant expertise.' },
+    { k: 'macro', t: 'Programs', d: 'Scope national PhD pipelines by field, institution, ranking, and demographics.' },
+    { k: 'meso', t: 'Clusters', d: 'Find where research activity concentrates around specific topics.' },
+    { k: 'micro', t: 'People', d: 'Discover candidates and dissertation matches with relevant expertise.' },
   ];
   return `
   <div class="landing">
@@ -480,10 +470,10 @@ function viewSearch() {
     { t: 'Analyze JD', i: 'jd', q: '__jd__' },
   ];
   const status = [
-    { t: 'Macro Lens', s: 'Live', kind: 'live', d: 'Program-level PhD pipelines', ic: 'macro', grad: 'linear-gradient(135deg,#1e3a8a,#3b82f6)' },
-    { t: 'Meso Lens', s: 'In Development', kind: 'dev', d: 'Research-activity clusters', ic: 'meso', grad: 'linear-gradient(135deg,#0891b2,#22d3ee)' },
-    { t: 'Micro Historical', s: 'Live', kind: 'live', d: 'Specialization matching', ic: 'micro', grad: 'linear-gradient(135deg,#6366f1,#a855f7)' },
-    { t: 'Micro Real-Time', s: 'In Development', kind: 'dev', d: 'Job-market verification', ic: 'shield', grad: 'linear-gradient(135deg,#f59e0b,#f97316)' },
+    { t: 'Programs', d: 'Program-level PhD pipelines', ic: 'macro', grad: 'linear-gradient(135deg,#1e3a8a,#3b82f6)' },
+    { t: 'Clusters', d: 'Research-activity clusters', ic: 'meso', grad: 'linear-gradient(135deg,#0891b2,#22d3ee)' },
+    { t: 'People', d: 'Specialization matching', ic: 'micro', grad: 'linear-gradient(135deg,#6366f1,#a855f7)' },
+    { t: 'People — Job Market', d: 'Job-market verification', ic: 'shield', grad: 'linear-gradient(135deg,#f59e0b,#f97316)' },
   ];
   const askMode = State.searchMode === 'ask';
   return shell(`
@@ -520,13 +510,12 @@ function viewSearch() {
     </div>
 
     <div class="status-grid">
-      <div class="section-head"><h3>Lens availability</h3></div>
+      <div class="section-head"><h3>What each lens does</h3></div>
       <div class="grid grid-4">
         ${status.map(s => `
           <div class="card hoverable status-card">
             <div class="sc-top">
               <div class="sc-ic" style="background:${s.grad}">${ico(s.ic)}</div>
-              <span class="tag tag-${s.kind}"><span class="dot"></span>${s.s}</span>
             </div>
             <div><h4>${s.t}</h4><p>${s.d}</p></div>
           </div>`).join('')}
@@ -550,13 +539,13 @@ function viewSearch() {
    ============================================================ */
 function viewLenses() {
   const lenses = [
-    { k: 'macro', t: 'Macro Lens', sub: 'Program pipelines', tipKey: 'macro',
+    { k: 'macro', t: 'Programs', sub: 'Program pipelines', tipKey: 'macro',
       d: 'Use this when you want to understand how many PhDs are produced in a field, by institution, ranking, demographics, or institution type.',
       ex: 'PhDs in bioengineering at AAU institutions', out: 'PhD counts by relevant programs and institutions.', screen: 'macro' },
-    { k: 'meso', t: 'Meso Lens', sub: 'Research-activity clusters', tipKey: 'meso',
+    { k: 'meso', t: 'Clusters', sub: 'Research-activity clusters', tipKey: 'meso',
       d: 'Use this when you want to know where dissertation research on a specific topic is concentrated.',
       ex: 'Which institutions produce significant research on civil wars?', out: 'Institutions with strong or signature research concentrations.', screen: 'meso' },
-    { k: 'micro', t: 'Micro Lens', sub: 'Individual candidates', tipKey: 'micro',
+    { k: 'micro', t: 'People', sub: 'Individual candidates', tipKey: 'micro',
       d: 'Use this when you want to find PhDs or job-market candidates with a specific research specialization.',
       ex: 'Candidates working on energy and sustainability', out: 'Candidate and dissertation matches with verification signals.', screen: 'micro' },
   ];
@@ -586,7 +575,7 @@ function viewLenses() {
       <div class="insight-icon">${ico('compass')}</div>
       <div>
         <h4>One natural-language interface, three depths of answer</h4>
-        <p>Ask a question in plain language. CoPilot detects whether you need a program pipeline (Macro), a research concentration map (Meso), or individual candidate matches (Micro) — and routes you to the right result automatically.</p>
+        <p>Ask a question in plain language. CoPilot detects whether you need a program pipeline (Programs), a research concentration map (Clusters), or individual candidate matches (People) — and routes you to the right result automatically.</p>
       </div>
     </div>
   `, 'lenses');
@@ -598,9 +587,9 @@ function viewLenses() {
 function viewRouting(query, target) {
   const order = ['macro', 'meso', 'micro'];
   const explains = {
-    macro: ['Detected Lens: Macro', 'This query asks about program-level PhD pipelines.'],
-    meso: ['Detected Lens: Meso', 'This query asks where research activity is concentrated.'],
-    micro: ['Detected Lens: Micro', 'This query asks for individual candidate or dissertation matches.'],
+    macro: ['Detected Lens: Programs', 'This query asks about program-level PhD pipelines.'],
+    meso: ['Detected Lens: Clusters', 'This query asks where research activity is concentrated.'],
+    micro: ['Detected Lens: People', 'This query asks for individual candidate or dissertation matches.'],
   };
   const e = explains[target.lens] || explains.macro;
   return shell(`
@@ -663,7 +652,7 @@ function animateRouting(query, target) {
    Shared results header
    ============================================================ */
 function resultsHead(lens, title, desc, actions) {
-  const label = lens === 'macro' ? 'Macro Lens' : lens === 'meso' ? 'Meso Lens' : 'Micro Lens';
+  const label = lens === 'macro' ? 'Programs' : lens === 'meso' ? 'Clusters' : 'People';
   return `
     <div class="results-head">
       <div class="rh-left">
@@ -688,10 +677,10 @@ function viewMacro() {
     { v: '10', l: 'Top-Ranked Programs', ic: 'trend', t: 'Top-10 tier', tk: 'flat' },
   ];
   return shell(`
-    ${resultsHead('macro', 'Macro Lens: Program Pipeline Scoping',
+    ${resultsHead('macro', 'Programs: PhD Pipeline Scoping',
       'Program-level view of PhD production across relevant institutions.',
       `<button class="btn btn-ghost btn-sm" onclick="App.toast('Refine by specialization — opening filters (demo)','filter')">${ico('filter')} Refine by specialization</button>
-       <button class="btn btn-soft btn-sm" onclick="App.go('meso')">${ico('meso')} Switch to Meso Lens</button>
+       <button class="btn btn-soft btn-sm" onclick="App.go('meso')">${ico('meso')} Switch to Clusters</button>
        <button class="btn btn-primary btn-sm" onclick="App.toast('Mock report exported (demo)','download')">${ico('download')} Export mock report</button>`)}
 
     <div class="results-head" style="margin:0 0 20px"><div class="rh-left" style="margin-top:-8px"><span class="tag tag-blue">Query · "PhDs in bioengineering at AAU institutions"</span></div></div>
@@ -852,10 +841,10 @@ function viewMeso() {
     { v: '11', l: 'Strong Clusters', ic: 'layers' },
   ];
   return shell(`
-    ${resultsHead('meso', 'Meso Lens: Research-Activity Clusters',
+    ${resultsHead('meso', 'Clusters: Where Research Concentrates',
       'Identify institutions where dissertation research concentrates around a specific topic.',
       `<button class="btn btn-ghost btn-sm" onclick="App.go('micro')">${ico('micro')} View matching candidates</button>
-       <button class="btn btn-soft btn-sm" onclick="App.go('macro')">${ico('macro')} Compare with Macro</button>
+       <button class="btn btn-soft btn-sm" onclick="App.go('macro')">${ico('macro')} Compare with Programs</button>
        <button class="btn btn-primary btn-sm" onclick="App.toast('Insight saved to workspace (demo)','save')">${ico('save')} Save mock insight</button>`)}
 
     <div class="results-head" style="margin:0 0 20px"><div class="rh-left" style="margin-top:-8px"><span class="tag tag-cyan">Query · "Which institutions produce significant research on civil wars in political science?"</span></div></div>
@@ -912,7 +901,7 @@ function matchRing(pct) {
 function viewMicro() {
   const initials = (n) => n.split(' ').map(w => w[0]).join('');
   return shell(`
-    ${resultsHead('micro', 'Micro Lens: Specialization Matching',
+    ${resultsHead('micro', 'People: Specialization Matching',
       'Find individual PhDs whose dissertation topics match the search area.',
       `<button class="btn btn-soft btn-sm" onclick="App.go('verify')">${ico('shield')} Check current job market</button>
        <button class="btn btn-primary btn-sm" onclick="App.toast('Candidate shortlist saved (demo)','save')">${ico('save')} Save shortlist</button>`)}
@@ -992,7 +981,7 @@ function viewVerify() {
   const statusIcon = (s) => s === 'available' ? 'checkc' : s === 'possible' ? 'clock' : 'x';
   const kindIcon = (k) => k === 'ok' ? 'checkc' : k === 'warn' ? 'clock' : k === 'bad' ? 'x' : 'eye';
   return shell(`
-    ${resultsHead('micro', 'Micro Lens: Current-Cycle Candidate Verification',
+    ${resultsHead('micro', 'People: Current-Cycle Verification',
       'Simulated job-market verification using department-page and personal-site signals.',
       `<button class="btn btn-ghost btn-sm" onclick="App.go('micro')">${ico('micro')} Back to all matches</button>
        <button class="btn btn-primary btn-sm" onclick="App.toast('Verified shortlist saved (demo)','save')">${ico('save')} Save shortlist</button>`)}
@@ -1095,9 +1084,9 @@ function viewJD() {
 
 function jdResultsHTML() {
   const routes = [
-    { n: 1, lens: 'macro', t: 'Map JD to academic pipelines', d: 'Estimate how many PhDs are produced in these areas, by institution and ranking tier.', cta: 'Run Macro Analysis', grad: 'linear-gradient(135deg,#1e3a8a,#3b82f6)', color: 'var(--royal-600)', screen: 'macro' },
-    { n: 2, lens: 'meso', t: 'Find institutions with research clusters', d: 'Locate institutions where dissertation research on these topics is concentrated.', cta: 'Run Meso Analysis', grad: 'linear-gradient(135deg,#0891b2,#22d3ee)', color: '#0e7490', screen: 'meso' },
-    { n: 3, lens: 'micro', t: 'Find dissertation and candidate matches', d: 'Surface individual PhDs and dissertations matching the extracted specialization.', cta: 'Run Micro Analysis', grad: 'linear-gradient(135deg,#6366f1,#a855f7)', color: '#7c3aed', screen: 'micro' },
+    { n: 1, lens: 'macro', t: 'Map JD to academic pipelines', d: 'Estimate how many PhDs are produced in these areas, by institution and ranking tier.', cta: 'Analyze Programs', grad: 'linear-gradient(135deg,#1e3a8a,#3b82f6)', color: 'var(--royal-600)', screen: 'macro' },
+    { n: 2, lens: 'meso', t: 'Find institutions with research clusters', d: 'Locate institutions where dissertation research on these topics is concentrated.', cta: 'Map Clusters', grad: 'linear-gradient(135deg,#0891b2,#22d3ee)', color: '#0e7490', screen: 'meso' },
+    { n: 3, lens: 'micro', t: 'Find dissertation and candidate matches', d: 'Surface individual PhDs and dissertations matching the extracted specialization.', cta: 'Find People', grad: 'linear-gradient(135deg,#6366f1,#a855f7)', color: '#7c3aed', screen: 'micro' },
   ];
   return `
     <div class="card extract-panel" style="margin-bottom:24px">
@@ -1131,102 +1120,7 @@ function jdResultsHTML() {
 }
 
 /* ============================================================
-   SCREEN 10 — Pool evaluation
-   ============================================================ */
-function viewPool() {
-  const kpis = [
-    { v: '1,248', l: 'Potential Pool Size', ic: 'graduation' },
-    { v: '86', l: 'Applicant Pool Size', ic: 'users' },
-    { v: '6.9%', l: 'Coverage Ratio', ic: 'target' },
-    { v: '12', l: 'Underrepresented Institutions', ic: 'building' },
-  ];
-  const maxPot = Math.max(...POOL_ROWS.map(r => r.pot));
-  const gapTag = (k) => k === 'bad' ? 'style="background:rgba(244,63,94,0.1);color:var(--rose-600)"' : k === 'warn' ? '' : '';
-  const gapClass = (k) => k === 'ok' ? 'tag-live' : k === 'warn' ? 'tag-dev' : '';
-  return shell(`
-    <div class="page-head">
-      <div class="kicker"><span class="kdot"></span> Pool evaluation</div>
-      <h1>Applicant Pool Evaluation</h1>
-      <p>Compare the applicant pool against the broader potential market to support institutional learning.</p>
-      <div style="margin-top:12px"><span class="sim-label">${ico('alert')} Simulated result · prototype data</span></div>
-    </div>
-
-    <div class="kpi-row">
-      ${kpis.map(k => `<div class="kpi"><div class="kpi-icon">${ico(k.ic)}</div><div class="kpi-val">${k.v}</div><div class="kpi-label">${k.l}</div></div>`).join('')}
-    </div>
-
-    <div class="grid grid-2" style="gap:24px;align-items:start;margin-bottom:24px">
-      <div class="card chart-card">
-        <div class="section-head"><div><h3>${ico('users')} Potential vs. actual pool</h3><div class="sub">By segment · simulated</div></div></div>
-        ${POOL_ROWS.map(r => `
-          <div class="compare-row">
-            <div class="compare-label">${r.seg}</div>
-            <div class="compare-bars">
-              <div class="cbar"><span class="cb-name">Potential</span><span class="cb-track"><span class="cb-fill potential" style="width:${(r.pot / maxPot) * 100}%"></span></span><span class="cb-num">${r.pot}</span></div>
-              <div class="cbar"><span class="cb-name">Applicants</span><span class="cb-track"><span class="cb-fill actual" style="width:${(r.act / maxPot) * 100}%"></span></span><span class="cb-num">${r.act}</span></div>
-            </div>
-          </div>`).join('')}
-        <div class="bubble-legend" style="margin-top:16px">
-          <span class="legend-item"><span class="sw" style="background:linear-gradient(90deg,#1e3a8a,#3b82f6)"></span> Potential talent pool</span>
-          <span class="legend-item"><span class="sw" style="background:linear-gradient(90deg,#06b6d4,#22d3ee)"></span> Actual applicant pool</span>
-        </div>
-      </div>
-
-      <div class="card chart-card">
-        <div class="section-head"><div><h3>${ico('target')} Coverage ratio</h3><div class="sub">Applicants as share of potential pool</div></div></div>
-        <div class="donut-wrap">
-          <svg class="donut" viewBox="0 0 42 42">
-            <circle cx="21" cy="21" r="15.9" fill="none" stroke="#e2e8f0" stroke-width="5"/>
-            <circle cx="21" cy="21" r="15.9" fill="none" stroke="url(#dg)" stroke-width="5" stroke-linecap="round"
-              stroke-dasharray="6.9 93.1" stroke-dashoffset="25" transform="rotate(0 21 21)"/>
-            <text x="21" y="20" text-anchor="middle" class="donut-center">6.9%</text>
-            <text x="21" y="27" text-anchor="middle" class="donut-sub">Coverage</text>
-            <defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
-          </svg>
-          <div class="legend">
-            <div class="legend-item"><span class="sw" style="background:#3b82f6"></span> Reached applicants <strong>86</strong></div>
-            <div class="legend-item"><span class="sw" style="background:#e2e8f0"></span> Unreached potential <strong>1,162</strong></div>
-            <div style="font-size:12.5px;color:var(--text-soft);margin-top:6px;line-height:1.5">The current applicant pool reaches a small fraction of the available talent market for this topic.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tbl-wrap" style="margin-bottom:24px">
-      <div class="section-head" style="padding:18px 18px 0"><h3>Coverage gaps by segment</h3></div>
-      <table>
-        <thead><tr><th>Segment</th><th>Potential Pool</th><th>Actual Applicants</th><th>Coverage Gap</th><th>Recommendation</th></tr></thead>
-        <tbody>
-          ${POOL_ROWS.map(r => `
-            <tr>
-              <td class="inst">${r.seg}</td>
-              <td class="num-strong">${r.pot}</td>
-              <td class="num-strong">${r.act}</td>
-              <td><span class="tag ${gapClass(r.gapKind)}" ${gapTag(r.gapKind)}>${r.gap}</span></td>
-              <td>${r.rec}</td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="insight" style="margin-bottom:24px">
-      <div class="insight-icon">${ico('bolt')}</div>
-      <div>
-        <h4>Pool insight</h4>
-        <p>The actual applicant pool underrepresents several institutions with strong research activity in this topic.</p>
-      </div>
-    </div>
-
-    <div class="flex gap-sm">
-      <button class="btn btn-primary" onclick="App.toast('Mock summary generated (demo)','spark')">${ico('spark')} Generate mock summary</button>
-      <button class="btn btn-soft" onclick="App.toast('Insight saved (demo)','save')">${ico('save')} Save insight</button>
-      <button class="btn btn-ghost" onclick="App.go('search')">${ico('home')} Return to dashboard</button>
-    </div>
-  `, 'pool');
-}
-
-/* ============================================================
-   SCREEN 11 — Roadmap
+   SCREEN 10 — Roadmap
    ============================================================ */
 function viewRoadmap() {
   const cards = [
@@ -1334,6 +1228,7 @@ const App = {
 
   render(screen) {
     State.current = screen;
+    if (typeof tipEl !== 'undefined' && tipEl) tipEl.classList.remove('show'); // drop any open tooltip before swapping views
     const root = document.getElementById('app');
     let html;
     switch (screen) {
@@ -1347,7 +1242,6 @@ const App = {
       case 'micro': html = viewMicro(); break;
       case 'verify': html = viewVerify(); break;
       case 'jd': html = viewJD(); break;
-      case 'pool': html = viewPool(); break;
       case 'roadmap': html = viewRoadmap(); break;
       case 'empty': html = viewEmpty(); break;
       default: html = viewSearch();
@@ -1433,30 +1327,47 @@ const App = {
 };
 window.App = App;
 
-/* ---------- Tooltips (fixed-position so they never clip inside cards/tables) ---------- */
-function positionTip(tip, body) {
+/* ---------- Tooltips ----------
+   A single shared bubble lives directly under <body>, so it's never clipped or
+   mispositioned by transformed/overflow-hidden ancestors (e.g. hoverable cards).
+   On hover we copy the trigger's content into it and position it in viewport coords. */
+let tipEl = null;
+function getTipEl() {
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.className = 'tip-body';
+    document.body.appendChild(tipEl);
+  }
+  return tipEl;
+}
+function positionTip(tip) {
+  const src = tip.querySelector('.tip-body');
+  if (!src) return;
+  const g = getTipEl();
+  g.innerHTML = src.innerHTML;
+  g.classList.add('show');                                   // make it measurable + visible
   const t = tip.getBoundingClientRect();
-  const bw = body.offsetWidth, bh = body.offsetHeight, m = 8;
+  const bw = g.offsetWidth, bh = g.offsetHeight, m = 8;
   let left = t.left + t.width / 2 - bw / 2;
   left = Math.max(m, Math.min(left, window.innerWidth - bw - m));
   let top = t.top - bh - 10, below = false;
-  if (top < m) { top = t.bottom + 10; below = true; }       // flip below if no room above
-  body.style.left = left + 'px';
-  body.style.top = top + 'px';
+  if (top < m) { top = t.bottom + 10; below = true; }        // flip below if no room above
+  g.style.left = left + 'px';
+  g.style.top = top + 'px';
   const arrowX = Math.max(12, Math.min(t.left + t.width / 2 - left, bw - 12));
-  body.style.setProperty('--arrow-x', arrowX + 'px');
-  body.classList.toggle('below', below);
-  body.classList.add('show');
+  g.style.setProperty('--arrow-x', arrowX + 'px');
+  g.classList.toggle('below', below);
 }
+function hideTip() { if (tipEl) tipEl.classList.remove('show'); }
 function initTips() {
-  const show = (e) => { const tip = e.target.closest && e.target.closest('.tip'); if (!tip) return; const b = tip.querySelector('.tip-body'); if (b) positionTip(tip, b); };
-  const hide = (e) => { const tip = e.target.closest && e.target.closest('.tip'); if (!tip) return; const b = tip.querySelector('.tip-body'); if (b) b.classList.remove('show'); };
+  const show = (e) => { const tip = e.target.closest && e.target.closest('.tip'); if (tip) positionTip(tip); };
+  const hide = (e) => { const tip = e.target.closest && e.target.closest('.tip'); if (!tip) return; if (e.relatedTarget && tip.contains(e.relatedTarget)) return; hideTip(); };
   document.addEventListener('mouseover', show);
   document.addEventListener('mouseout', hide);
   document.addEventListener('focusin', show);
   document.addEventListener('focusout', hide);
-  // hide any open tip on scroll so it doesn't float away from its trigger
-  window.addEventListener('scroll', () => document.querySelectorAll('.tip-body.show').forEach(b => b.classList.remove('show')), true);
+  // hide on scroll so it doesn't float away from its trigger
+  window.addEventListener('scroll', hideTip, true);
 }
 
 document.addEventListener('DOMContentLoaded', () => { App.render('landing'); initTips(); });
