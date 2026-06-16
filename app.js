@@ -95,12 +95,12 @@ const MACRO_ROWS = [
 ];
 
 const MESO_ROWS = [
-  { inst: 'University of Chicago', field: 'Political Science', topic: 'Civil Conflict', share: 18, lq: 2.7, cluster: 'Signature Cluster' },
-  { inst: 'Princeton University', field: 'Political Science', topic: 'Comparative Politics', share: 15, lq: 2.3, cluster: 'Strong Cluster' },
-  { inst: 'University of Michigan', field: 'Political Science', topic: 'Civil War Studies', share: 12, lq: 1.9, cluster: 'Strong Cluster' },
-  { inst: 'Duke University', field: 'Political Science', topic: 'Conflict Studies', share: 9, lq: 1.5, cluster: 'Notable Cluster' },
-  { inst: 'Columbia University', field: 'Political Science', topic: 'Political Violence', share: 8, lq: 1.4, cluster: 'Notable Cluster' },
-  { inst: 'Stanford University', field: 'Political Science', topic: 'Conflict & Security', share: 7, lq: 1.3, cluster: 'Notable Cluster' },
+  { inst: 'University of Chicago', field: 'Political Science', topics: ['Civil Conflict', 'Rebel Governance', 'Ethnic Violence'], share: 18, lq: 2.7, cluster: 'Signature Cluster' },
+  { inst: 'Princeton University', field: 'Political Science', topics: ['Civil War Onset', 'Insurgency', 'Comparative Politics'], share: 15, lq: 2.3, cluster: 'Strong Cluster' },
+  { inst: 'University of Michigan', field: 'Political Science', topics: ['Civil War Studies', 'Peacekeeping', 'Post-Conflict Recovery'], share: 12, lq: 1.9, cluster: 'Strong Cluster' },
+  { inst: 'Duke University', field: 'Political Science', topics: ['Conflict Studies', 'State Repression', 'Political Violence'], share: 9, lq: 1.5, cluster: 'Notable Cluster' },
+  { inst: 'Columbia University', field: 'Political Science', topics: ['Political Violence', 'Civil Resistance', 'Conflict Resolution'], share: 8, lq: 1.4, cluster: 'Notable Cluster' },
+  { inst: 'Stanford University', field: 'Political Science', topics: ['Interstate War', 'Security Studies', 'Conflict & Security'], share: 7, lq: 1.3, cluster: 'Notable Cluster' },
 ];
 
 const MICRO_CANDS = [
@@ -871,13 +871,13 @@ function viewMeso() {
     <div class="tbl-wrap" style="margin-bottom:24px">
       <div class="section-head" style="padding:18px 18px 0"><h3>Cluster ranking</h3></div>
       <table>
-        <thead><tr><th>Institution</th><th>Field</th><th>Topic</th><th>Research Share ${tip('share')}</th><th>Location Quotient ${tip('lq')}</th><th>Cluster Strength</th></tr></thead>
+        <thead><tr><th>Institution</th><th>Field</th><th>Dissertation Topics</th><th>Research Share ${tip('share')}</th><th>Location Quotient ${tip('lq')}</th><th>Cluster Strength</th></tr></thead>
         <tbody>
           ${MESO_ROWS.map(r => `
             <tr>
               <td class="inst">${r.inst}</td>
               <td>${r.field}</td>
-              <td>${r.topic}</td>
+              <td><div class="diss-topics">${r.topics.map(t => `<span class="tag tag-cyan">${t}</span>`).join('')}</div></td>
               <td><div class="cell-bar"><span class="num-strong">${r.share}%</span><span class="track"><span class="fill" style="width:${r.share * 5}%"></span></span></div></td>
               <td><span class="num-strong">${r.lq}</span></td>
               <td>${clusterTag(r.cluster)}</td>
